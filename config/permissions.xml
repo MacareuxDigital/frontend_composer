@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<concrete5-cif version="1.0">
+    <permissionkeys>
+        <permissionkey handle="edit_in_frontend_composer" name="Edit in Frontend Composer" description=""
+                       package="frontend_composer" category="page">
+        </permissionkey>
+        <permissionkey handle="add_from_frontend_composer" name="Add From Frontend Composer" description=""
+                       package="frontend_composer" category="page_type">
+        </permissionkey>
+    </permissionkeys>
+</concrete5-cif>

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<concrete5-cif version="1.0">
+    <blocktypes>
+        <blocktype handle="add_edit_page_button" package="frontend_composer"/>
+        <blocktype handle="frontend_composer" package="frontend_composer"/>
+    </blocktypes>
+</concrete5-cif>
