@@ -1,0 +1,10 @@
+{
+  "name": "concrete5cojp/frontend_composer",
+  "description": "Make it enables to create pages from front end of your site.'",
+  "type": "concrete5-package",
+  "license": "MIT",
+  "minimum-stability": "stable",
+  "require": {
+    "concrete5/core": "^8.5"
+  }
+}
