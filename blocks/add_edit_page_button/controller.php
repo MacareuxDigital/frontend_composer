@@ -1,4 +1,5 @@
 <?php
+
 namespace Concrete\Package\FrontendComposer\Block\AddEditPageButton;
 
 use Concrete\Core\Block\BlockController;

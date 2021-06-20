@@ -1,4 +1,5 @@
 <?php
+
 namespace Concrete\Package\FrontendComposer;
 
 use Concrete\Core\Package\Package;

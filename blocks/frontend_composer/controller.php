@@ -1,4 +1,5 @@
 <?php
+
 namespace Concrete\Package\FrontendComposer\Block\FrontendComposer;
 
 use Concrete\Core\Block\BlockController;
@@ -57,21 +58,8 @@ class Controller extends BlockController
             $url = $resolver->resolve([$c, 'composer', $d->getCollectionID()]);
 
             return new RedirectResponse($url);
-        } else {
-            $this->set('error', $error);
         }
-    }
-
-    /**
-     * @param Type $type
-     *
-     * @return bool
-     */
-    protected function canAddPageType(Type $type)
-    {
-        $cp = new Checker($type);
-
-        return $cp->canAddFromFrontendComposer();
+        $this->set('error', $error);
     }
 
     public function action_edit_page($cID)
@@ -141,6 +129,18 @@ class Controller extends BlockController
         }
 
         $this->set('error', $error);
+    }
+
+    /**
+     * @param Type $type
+     *
+     * @return bool
+     */
+    protected function canAddPageType(Type $type)
+    {
+        $cp = new Checker($type);
+
+        return $cp->canAddFromFrontendComposer();
     }
 
     /**
