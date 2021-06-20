@@ -8,7 +8,10 @@ class Controller extends Package
 {
     protected $appVersionRequired = '8.5.1';
     protected $pkgHandle = 'frontend_composer';
-    protected $pkgVersion = '0.0.1';
+    protected $pkgVersion = '0.0.2';
+    protected $pkgAutoloaderRegistries = [
+        'src' => '\C5j\FrontendComposer',
+    ];
 
     public function getPackageName()
     {

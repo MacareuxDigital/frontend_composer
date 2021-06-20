@@ -2,15 +2,16 @@
 
 namespace Concrete\Package\FrontendComposer\Block\AddEditPageButton;
 
+use C5j\FrontendComposer\PermissionCheckerTrait;
 use Concrete\Core\Block\BlockController;
 use Concrete\Core\Form\Service\Widget\PageSelector;
 use Concrete\Core\Page\Page;
 use Concrete\Core\Page\Type\Type;
-use Concrete\Core\Permission\Checker;
-use Concrete\Core\User\User;
 
 class Controller extends BlockController
 {
+    use PermissionCheckerTrait;
+
     protected $btTable = 'btAddEditPageButton';
     protected $btInterfaceWidth = '400';
     protected $btInterfaceHeight = '350';
@@ -110,35 +111,5 @@ class Controller extends BlockController
 
         $this->set('buttonLabel', $buttonLabel);
         $this->set('disabled', $disabled);
-    }
-
-    /**
-     * @param Type $type
-     *
-     * @return bool
-     */
-    protected function canAddPageType(Type $type)
-    {
-        $cp = new Checker($type);
-
-        return $cp->canAddFromFrontendComposer();
-    }
-
-    /**
-     * @param Page $page
-     *
-     * @return bool
-     */
-    protected function canEditPage(Page $page)
-    {
-        /** @var User $u */
-        $u = $this->app->make(User::class);
-        if (!$u->isRegistered()) {
-            return false;
-        }
-
-        $cp = new Checker($page);
-
-        return $cp->canEditInFrontendComposer();
     }
 }
