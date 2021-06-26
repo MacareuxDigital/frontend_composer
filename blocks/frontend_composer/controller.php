@@ -7,11 +7,11 @@ use Concrete\Core\Block\BlockController;
 use Concrete\Core\Error\ErrorList\ErrorList;
 use Concrete\Core\Http\Request;
 use Concrete\Core\Page\Page;
+use Concrete\Core\Page\Type\Composer\FormLayoutSet;
 use Concrete\Core\Page\Type\Type;
-use Concrete\Core\Routing\RedirectResponse;
 use Concrete\Core\Url\Resolver\Manager\ResolverManagerInterface;
-use Concrete\Core\User\User;
 use Concrete\Core\Validation\CSRF\Token;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class Controller extends BlockController
 {
@@ -54,29 +54,22 @@ class Controller extends BlockController
         if (!$error->has()) {
             $pt = $pageType->getPageTypeDefaultPageTemplateObject();
             $d = $pageType->createDraft($pt);
-            $c = Page::getCurrentPage();
-            /** @var ResolverManagerInterface $resolver */
-            $resolver = $this->app->make(ResolverManagerInterface::class);
-            $url = $resolver->resolve([$c, 'composer', $d->getCollectionID()]);
 
-            return new RedirectResponse($url);
+            return $this->buildRedirectToAction('composer', $d);
         }
         $this->set('error', $error);
     }
 
     public function action_edit_page($cID)
     {
-        $c = Page::getCurrentPage();
-        /** @var ResolverManagerInterface $resolver */
-        $resolver = $this->app->make(ResolverManagerInterface::class);
-        $url = $resolver->resolve([$c, 'composer', $cID]);
-
-        return new RedirectResponse($url);
+        $c = Page::getByID($cID);
+        if (is_object($c) && !$c->isError() && $this->canEditPage($c)) {
+            return $this->buildRedirectToAction('composer', $cID);
+        }
     }
 
     public function action_composer($cID)
     {
-        $c = Page::getCurrentPage();
         $page = Page::getByID($cID);
 
         /** @var ErrorList $error */
@@ -94,7 +87,7 @@ class Controller extends BlockController
             $this->set('composer', $composer);
 
             $resolver = $this->app->make(ResolverManagerInterface::class);
-            $action_url = $resolver->resolve([$c, 'composer', $cID]);
+            $action_url = $resolver->resolve([Page::getCurrentPage(), 'composer', $cID]);
             $this->set('action_url', $action_url);
 
             if (Request::isPost()) {
@@ -122,7 +115,7 @@ class Controller extends BlockController
                         $saver->saveForm($page);
                         $pageType->publish($page);
 
-                        return new RedirectResponse($page->getCollectionLink());
+                        return $this->buildRedirectToAction('complete', $page);
                     }
                 }
             }
@@ -131,5 +124,25 @@ class Controller extends BlockController
         }
 
         $this->set('error', $error);
+    }
+
+    public function action_complete($cID)
+    {
+        $c = Page::getByID($cID, 'RECENT');
+        if (is_object($c) && !$c->isError() && $this->canViewCompletePage($c)) {
+            $fieldSets = FormLayoutSet::getList($c->getPageTypeObject());
+            $this->set('page', $c);
+            $this->set('fieldSets', $fieldSets);
+        }
+    }
+
+    public function buildRedirectToAction(string $action, Page $target): RedirectResponse
+    {
+        $c = Page::getCurrentPage();
+        /** @var ResolverManagerInterface $resolver */
+        $resolver = $this->app->make(ResolverManagerInterface::class);
+        $url = $resolver->resolve([$c, $action, $target->getCollectionID()]);
+
+        return $this->buildRedirect($url);
     }
 }

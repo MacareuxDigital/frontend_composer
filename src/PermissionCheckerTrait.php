@@ -35,4 +35,26 @@ trait PermissionCheckerTrait
 
         return $cp->canEditInFrontendComposer();
     }
+
+    /**
+     * @param Page $page
+     *
+     * @return bool
+     */
+    protected function canViewPage(Page $page): bool
+    {
+        $cp = new Checker($page);
+
+        return $cp->canViewPage();
+    }
+
+    /**
+     * @param Page $page
+     *
+     * @return bool
+     */
+    protected function canViewCompletePage(Page $page): bool
+    {
+        return ($this->canAddPageType($page->getPageTypeObject()) || $this->canEditPage($page)) || $this->canViewPage($page);
+    }
 }
