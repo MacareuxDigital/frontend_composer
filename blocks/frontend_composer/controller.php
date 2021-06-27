@@ -64,7 +64,7 @@ class Controller extends BlockController
     {
         $c = Page::getByID($cID);
         if (is_object($c) && !$c->isError() && $this->canEditPage($c)) {
-            return $this->buildRedirectToAction('composer', $cID);
+            return $this->buildRedirectToAction('composer', $c);
         }
     }
 
