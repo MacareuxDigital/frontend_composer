@@ -4,6 +4,7 @@ use Concrete\Core\Page\Page;
 
 defined('C5_EXECUTE') or die('Access Denied.');
 
+/** @var \Concrete\Core\Form\Service\Form $form */
 /** @var \Concrete\Core\Validation\CSRF\Token $token */
 $token = Core::make('token');
 $c = Page::getCurrentPage();
@@ -22,6 +23,7 @@ if (isset($target) && is_object($target)) {
     } ?>
     <form method="post" action="<?= h($action); ?>">
         <?php $token->output('frontend_composer'); ?>
+        <?php echo $form->hidden('rcID', $c->getCollectionID()); ?>
         <?php echo $form->submit('submit', $buttonLabel, $attrs); ?>
     </form>
     <?php

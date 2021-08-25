@@ -8,7 +8,7 @@ class Controller extends Package
 {
     protected $appVersionRequired = '8.5.1';
     protected $pkgHandle = 'frontend_composer';
-    protected $pkgVersion = '0.0.2';
+    protected $pkgVersion = '0.0.3';
     protected $pkgAutoloaderRegistries = [
         'src' => '\C5j\FrontendComposer',
     ];
@@ -30,5 +30,11 @@ class Controller extends Package
         $this->installContentFile('config/permissions.xml');
 
         return $pkg;
+    }
+
+    public function upgrade()
+    {
+        parent::upgrade();
+        $this->installContentFile('config/permissions.xml');
     }
 }

@@ -57,4 +57,16 @@ trait PermissionCheckerTrait
     {
         return ($this->canAddPageType($page->getPageTypeObject()) || $this->canEditPage($page)) || $this->canViewPage($page);
     }
+
+    /**
+     * @param Page $page
+     *
+     * @return bool
+     */
+    protected function canDiscardPage(Page $page): bool
+    {
+        $tp = new Checker($page->getPageTypeObject());
+
+        return ($page->isPageDraft() && $tp->canDiscardDraftFromFrontendComposer());
+    }
 }

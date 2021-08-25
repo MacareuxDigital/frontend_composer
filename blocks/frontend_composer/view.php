@@ -33,8 +33,27 @@ if (isset($pagetype) && is_object($pagetype) && isset($action_url) && !empty($ac
     <form method="post" action="<?= h($action_url); ?>">
         <?php $token->output('frontend_composer_save'); ?>
         <?php $composer->display($pagetype, $page); ?>
-        <?= $form->submit('submit', $composer->getPublishButtonTitle($page), ['class' => 'btn-primary']); ?>
+        <?php
+        if ($page->isPageDraft() && isset($discard_url) && !empty($discard_url)) {
+            echo $form->button('ccm-composer-discard-draft', t('Discard Draft'), ['class' => 'btn-default']);
+        } elseif(isset($cancel_url) && !empty($cancel_url)) {
+            ?>
+            <a href="<?= h($cancel_url); ?>" class="btn btn-default"><?= t('Cancel'); ?></a>
+                <?php
+        }
+        ?>
+        <?= $form->submit('submit', $composer->getPublishButtonTitle($page), ['class' => 'btn-primary pull-right']); ?>
     </form>
+    <?php
+    if ($page->isPageDraft() && isset($discard_url) && !empty($discard_url)) {
+        ?>
+        <form id="ccm-composer-discard-draft-form" method="post" action="<?= h($discard_url); ?>" style="display: none">
+            <?php $token->output('frontend_composer_discard'); ?>
+            <?= $form->hidden('cID', $page->getCollectionID()); ?>
+        </form>
+        <?php
+    }
+    ?>
     <?php
 } elseif (isset($fieldSets)) {
     ?>

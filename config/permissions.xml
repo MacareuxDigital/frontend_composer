@@ -7,5 +7,8 @@
         <permissionkey handle="add_from_frontend_composer" name="Add From Frontend Composer" description=""
                        package="frontend_composer" category="page_type">
         </permissionkey>
+        <permissionkey handle="discard_draft_from_frontend_composer" name="Discard Draft From Frontend Composer" description=""
+                       package="frontend_composer" category="page_type">
+        </permissionkey>
     </permissionkeys>
 </concrete5-cif>
