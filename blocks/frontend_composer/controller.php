@@ -99,6 +99,11 @@ class Controller extends BlockController
                 $cancel_url = $resolver->resolve([$page]);
                 $this->set('cancel_url', $cancel_url);
             }
+            
+            if ($this->canDeletePage($page)) {
+                $delete_url = $resolver->resolve([Page::getCurrentPage(), 'delete', $cID]);
+                $this->set('delete_url', $delete_url);
+            }
 
             if (Request::isPost()) {
                 if (!$token->validate('frontend_composer_save')) {
@@ -201,5 +206,30 @@ class Controller extends BlockController
         }
 
         return $this->buildRedirect($url);
+    }
+    
+    public function action_delete($cID)
+    {
+        /** @var ErrorList $error */
+        $error = $this->app->make('error');
+        
+        $c = Page::getByID($cID);
+        if (!is_object($c) || $c->isError()) {
+            $error->addError(t('Invalid Page'));
+        } else {
+            if (!$this->canDeletePage($c)) {
+                $error->addError(t('You do not have a permission to delete page.'));
+            }
+        }
+        
+        if (!$error->has()) {
+            $c->delete();
+            /** @var ResolverManagerInterface $resolver */
+            $resolver = $this->app->make(ResolverManagerInterface::class);
+            $return_url = $resolver->resolve(['/']);
+            return $this->buildRedirect($return_url);
+        } else {
+            $this->set('error', $error);
+        }
     }
 }

@@ -69,4 +69,16 @@ trait PermissionCheckerTrait
 
         return ($page->isPageDraft() && $tp->canDiscardDraftFromFrontendComposer());
     }
+    
+    /**
+     * @param Page $page
+     *
+     * @return bool
+     */
+    protected function canDeletePage(Page $page): bool
+    {
+        $cp = new Checker($page->getPageTypeObject());
+        
+        return $cp->canDeletePage();
+    }
 }

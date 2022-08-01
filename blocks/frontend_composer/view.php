@@ -42,6 +42,13 @@ if (isset($pagetype) && is_object($pagetype) && isset($action_url) && !empty($ac
                 <?php
         }
         ?>
+        <?php
+        if (isset($delete_url) && !empty($delete_url)) {
+        ?>
+             <a href="<?= h($delete_url); ?>" class="btn btn-danger"><?= t('Delete'); ?></a>
+        <?php
+        }
+        ?>
         <?= $form->submit('submit', $composer->getPublishButtonTitle($page), ['class' => 'btn-primary pull-right']); ?>
     </form>
     <?php
